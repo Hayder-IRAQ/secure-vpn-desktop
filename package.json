@@ -1,0 +1,44 @@
+{
+  "name": "secure-vpn-desktop",
+  "version": "1.0.0",
+  "description": "Desktop VPN Client — Electron + Xray-core + sing-box (VLESS+REALITY+TUN)",
+  "author": "Hayder Odhafa <https://github.com/Hayder-IRAQ>",
+  "license": "MIT",
+  "main": "src/main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "pack": "electron-builder --dir",
+    "download-xray": "node scripts/download-engines.js"
+  },
+  "build": {
+    "appId": "com.securevpn.desktop",
+    "productName": "SecureVPN Desktop",
+    "directories": { "output": "release" },
+    "files": ["src/**/*", "node_modules/**/*", "package.json"],
+    "extraResources": [
+      { "from": "resources/xray", "to": "xray", "filter": ["**/*"] }
+    ],
+    "win": {
+      "target": ["nsis"],
+      "icon": "resources/icons/icon.png"
+    },
+    "mac": {
+      "target": ["dmg"],
+      "icon": "resources/icons/icon.png"
+    },
+    "linux": {
+      "target": ["AppImage"],
+      "icon": "resources/icons/icon.png"
+    }
+  },
+  "dependencies": {
+    "electron-store": "^8.2.0",
+    "electron-log": "^5.1.0"
+  },
+  "devDependencies": {
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1"
+  }
+}

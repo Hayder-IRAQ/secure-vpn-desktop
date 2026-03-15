@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecureVPN</title>
+  <link rel="stylesheet" href="styles/app.css">
+  <link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Title Bar -->
+    <div class="titlebar" id="titlebar">
+      <div class="titlebar-drag">
+        <span class="titlebar-title">SecureVPN</span>
+      </div>
+      <div class="titlebar-controls">
+        <button class="titlebar-btn minimize" id="btn-minimize">─</button>
+        <button class="titlebar-btn close" id="btn-close">✕</button>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar" id="sidebar">
+      <button class="nav-item active" data-page="home">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>VPN</span>
+      </button>
+      <button class="nav-item" data-page="servers">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span>Servers</span>
+      </button>
+      <button class="nav-item" data-page="settings">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Settings</span>
+      </button>
+    </nav>
+
+    <!-- Pages -->
+    <main class="content">
+
+      <!-- HOME PAGE -->
+      <div class="page active" id="page-home">
+        <div class="home-container">
+          <!-- Status -->
+          <div class="status-section">
+            <div class="status-indicator" id="status-indicator">
+              <div class="status-ring"></div>
+              <div class="status-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+            </div>
+            <div class="status-text" id="status-text">Disconnected</div>
+            <div class="status-ip" id="status-ip"></div>
+            <div class="status-timer" id="status-timer"></div>
+          </div>
+
+          <!-- Current Server -->
+          <div class="current-server" id="current-server">
+            <div class="server-flag" id="server-flag">🌐</div>
+            <div class="server-info">
+              <div class="server-name" id="server-name">Select a server</div>
+              <div class="server-detail" id="server-detail">Tap to choose location</div>
+            </div>
+            <svg class="server-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+
+          <!-- Connect Button -->
+          <button class="connect-btn" id="connect-btn">
+            <span class="connect-btn-text">Connect</span>
+            <div class="connect-btn-loader" style="display:none">
+              <div class="spinner"></div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- SERVERS PAGE -->
+      <div class="page" id="page-servers">
+        <div class="page-header">
+          <h2>Server Locations</h2>
+        </div>
+        <div class="server-search">
+          <input type="text" id="server-search-input" placeholder="Search country...">
+        </div>
+        <div class="server-list" id="server-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- SETTINGS PAGE -->
+      <div class="page" id="page-settings">
+        <div class="page-header">
+          <h2>Settings</h2>
+        </div>
+        <div class="settings-list">
+
+          <div class="setting-group">
+            <div class="setting-group-title">VPN Protocol</div>
+            <div class="setting-item">
+              <div class="setting-label">
+                <span>REALITY Fingerprint</span>
+                <span class="setting-desc">TLS fingerprint for anti-detection</span>
+              </div>
+              <select class="setting-select" id="setting-fingerprint">
+                <option value="random">Random</option>
+                <option value="chrome">Chrome</option>
+                <option value="firefox">Firefox</option>
+                <option value="safari">Safari</option>
+                <option value="edge">Edge</option>
+              </select>
+            </div>
+            <div class="setting-item">
+              <div class="setting-label">
+                <span>VLESS Port</span>
+                <span class="setting-desc">Server connection port</span>
+              </div>
+              <input type="number" class="setting-input" id="setting-vless-port" value="443" min="1" max="65535">
+            </div>
+          </div>
+
+          <div class="setting-group">
+            <div class="setting-group-title">Network</div>
+            <div class="setting-item">
+              <div class="setting-label">
+                <span>MTU Size</span>
+                <span class="setting-desc">Maximum transmission unit</span>
+              </div>
+              <input type="number" class="setting-input" id="setting-mtu" value="1420" min="1000" max="9000">
+            </div>
+            <div class="setting-item">
+              <div class="setting-label">
+                <span>Block Torrents</span>
+                <span class="setting-desc">Reject P2P traffic</span>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" id="setting-block-torrent" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-group">
+            <div class="setting-group-title">App</div>
+            <div class="setting-item clickable" id="btn-open-logs">
+              <div class="setting-label">
+                <span>Open Logs</span>
+                <span class="setting-desc">View application logs</span>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+            <div class="setting-item clickable" id="btn-check-engines">
+              <div class="setting-label">
+                <span>Check VPN Engines</span>
+                <span class="setting-desc">Verify Xray & sing-box status</span>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+            <div class="setting-item">
+              <div class="setting-label">
+                <span>Version</span>
+              </div>
+              <span class="setting-value" id="app-version">1.0.0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Toast container -->
+    <div class="toast-container" id="toast-container"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
